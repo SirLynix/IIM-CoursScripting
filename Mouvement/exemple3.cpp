@@ -155,5 +155,6 @@ Pour cette raison on passera donc par référence constante si nous n'avons pas 
 Quelques liens :
 https://stackoverflow.com/questions/7592630/is-pass-by-value-a-reasonable-default-in-c11
 https://stackoverflow.com/questions/2139224/how-to-pass-objects-to-functions-in-c
+https://sirlynixvanfrietjes.be/2018/02/25/cpp-moderne-le-passage-dobjets-par-argument/
 
 */
