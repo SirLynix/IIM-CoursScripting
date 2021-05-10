@@ -95,57 +95,58 @@ struct Foo {
 
 VS
 
-struct Foo {
-    std::string A;
-    std::string B;
-    std::string C;
+struct Foo 
+{
+	std::string A;
+	std::string B;
+	std::string C;
 
-    Foo(const std::string& _A, const std::string& _B, const std::string& _C) : 
-	A(_A},
-	B{_B}, 
-	C{_C} 
-	{
-	}
-
-    Foo(std::string&&_A, const std::string& _B, const std::string& _C) : 
-	A(std::move(_A)),
-	B(_B), 
-	C(_C) 
-	{
-	}
-
-    Foo(const std::string& _A, std::string&& _B, const std::string& _C) : 
-	A(_A), 
-	B(std::move(_B)), 
+	Foo(const std::string& _A, const std::string& _B, const std::string& _C) :
+	A(_A),
+	B(_B),
 	C(_C)
 	{
 	}
 
-    Foo(const std::string& _A, const std::string& _B, std::string&& _C) : 
-	A(_A), 
-	B(_B), 
+	Foo(std::string&& _A, const std::string& _B, const std::string& _C) :
+	A(std::move(_A)),
+	B(_B),
+	C(_C)
+	{
+	}
+
+	Foo(const std::string& _A, std::string&& _B, const std::string& _C) :
+	A(_A),
+	B(std::move(_B)),
+	C(_C)
+	{
+	}
+
+	Foo(const std::string& _A, const std::string& _B, std::string&& _C) :
+	A(_A),
+	B(_B),
 	C(std::move(_C))
 	{
 	}
 
-    Foo(std::string&& _A, std::string&& _B, const std::string& _C) : 
-	A(std::move(_A)), 
-	B(std::move(_B)), 
-	C(_C} 
+	Foo(std::string&& _A, std::string&& _B, const std::string& _C) :
+	A(std::move(_A)),
+	B(std::move(_B)),
+	C(_C)
 	{
 	}
 
-    Foo(std::string&& _A, const std::string& _B, std::string&& _C) : 
-	A(std::move(_A)), 
-	B(_B), 
-	C(std::move(_C)) 
+	Foo(std::string&& _A, const std::string& _B, std::string&& _C) :
+	A(std::move(_A)),
+	B(_B),
+	C(std::move(_C))
 	{
 	}
 
-    Foo(std::string&& _A, std::string&& _B, std::string&& _C) : 
-	A(std::move(_A)), 
-	B(std::move(_B)), 
-	C(std::move(_C)) 
+	Foo(std::string&& _A, std::string&& _B, std::string&& _C) :
+	A(std::move(_A)),
+	B(std::move(_B)),
+	C(std::move(_C))
 	{
 	}
 }
