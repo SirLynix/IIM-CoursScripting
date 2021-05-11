@@ -1,0 +1,5 @@
+bin/*
+!bin/resources/*
+build/*
+vsxmake*/*
+.xmake/*
