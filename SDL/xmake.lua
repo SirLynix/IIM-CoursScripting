@@ -16,7 +16,7 @@ target("sdl_playground")
     set_kind("binary") -- Nous précisons faire un exécutable
 
     -- On enregistre les fichiers de notre application
-    add_headerfiles("src/**.hpp")
+    add_headerfiles("src/**.h", "src/**.hpp")
     add_files("src/**.cpp")
 
     -- On rajoute les bibliothèques que notre projet utilise
