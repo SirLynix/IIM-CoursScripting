@@ -79,7 +79,7 @@ int main()
 			entityVelocity.y = 0.f;
 
 			registry.emplace<NoGravity>(player);
-			input = registry.emplace<Input>(player);
+			registry.emplace<Input>(player);
 		}
 
 		bool running = true;
