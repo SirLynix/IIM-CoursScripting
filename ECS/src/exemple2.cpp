@@ -17,7 +17,7 @@ struct Position
 struct Velocity
 {
 	float x = 0.f;
-	float y = -10.f;
+	float y = 0.f;
 };
 
 struct Drawable
@@ -27,6 +27,18 @@ struct Drawable
 	std::shared_ptr<SDLppTexture> texture;
 };
 
+struct NoGravity {};
+
+struct Input
+{
+	bool left = false;
+	bool right = false;
+	bool up = false;
+	bool down = false;
+};
+
+void PlayerControllerSystem(entt::registry& registry);
+void InputSystem(entt::registry& registry);
 void GravitySystem(entt::registry& registry, float elapsedTime);
 void RenderSystem(entt::registry& registry, SDLppRenderer& renderer);
 void VelocitySystem(entt::registry& registry, float elapsedTime);
@@ -50,11 +62,32 @@ int main()
 		Uint64 lastTime = sdl.GetPerformanceCounter();
 		Uint64 freq = sdl.GetPerformanceFrequency();
 
+
+		entt::entity player = registry.create();
+		{
+			auto& entityPos = registry.emplace<Position>(player);
+			entityPos.x = 200.f;
+			entityPos.y = 200.f;
+
+			auto& entityDrawable = registry.emplace<Drawable>(player);
+			entityDrawable.width = 640.f / 5.f;
+			entityDrawable.height = 427.f / 5.f;
+			entityDrawable.texture = SDLppTexture::FromFile(renderer, "resources/player.png");
+
+			auto& entityVelocity = registry.emplace<Velocity>(player);
+			entityVelocity.x = 0.f;
+			entityVelocity.y = 0.f;
+		}
+
+		registry.emplace<NoGravity>(player);
+		auto& input = registry.emplace<Input>(player);
+		input.right = true;
+
 		bool running = true;
 		while (running)
 		{
 			Uint64 now = sdl.GetPerformanceCounter();
-			float elapsedTime = static_cast<float>(now - lastTime) / freq;
+			float elapsedTime = static_cast<float>(now - lastTime) / static_cast<float>(freq);
 			lastTime = now;
 
 			SDL_Event event;
@@ -76,8 +109,8 @@ int main()
 							entityPos.y = event.button.y;
 
 							auto& entityDrawable = registry.emplace<Drawable>(entity);
-							entityDrawable.width = 100;
-							entityDrawable.height = 100;
+							entityDrawable.width = rand() % 100 + 100;
+							entityDrawable.height = rand() % 100 + 100;
 							entityDrawable.texture = circleTexture;
 
 							auto& entityVelocity = registry.emplace<Velocity>(entity);
@@ -94,6 +127,8 @@ int main()
 
 			renderer.SetDrawColor(0, 0, 0);
 			renderer.Clear();
+			InputSystem(registry);
+			PlayerControllerSystem(registry);
 			GravitySystem(registry, elapsedTime);
 			VelocitySystem(registry, elapsedTime);
 			RenderSystem(registry, renderer);
@@ -109,11 +144,48 @@ int main()
 	}
 }
 
+void PlayerControllerSystem(entt::registry& registry)
+{
+	auto view = registry.view<Input, Velocity>();
+	view.each([](const Input& input, Velocity& velocity)
+	{
+		velocity.x = 0.f;
+		velocity.y = 0.f;
+
+		if (input.up)
+			velocity.y += -500.f;
+
+		if (input.down)
+			velocity.y += 500.f;
+
+		if (input.left)
+			velocity.x += -500.f;
+
+		if (input.right)
+			velocity.x += 500.f;
+	});
+}
+
+void InputSystem(entt::registry& registry)
+{
+	const Uint8* state = SDL_GetKeyboardState(nullptr);
+
+	auto view = registry.view<Input>();
+	for (entt::entity entity : view)
+	{
+		auto& input = view.get<Input>(entity);
+		input.down = state[SDL_SCANCODE_DOWN];
+		input.left = state[SDL_SCANCODE_LEFT];
+		input.right = state[SDL_SCANCODE_RIGHT];
+		input.up = state[SDL_SCANCODE_UP];
+	}
+}
+
 void GravitySystem(entt::registry& registry, float elapsedTime)
 {
 	const float GravityConstant = 981.f;
 
-	auto view = registry.view<Velocity>();
+	auto view = registry.view<Velocity>(entt::exclude<NoGravity>);
 	for (entt::entity entity : view)
 	{
 		auto& entityVel = view.get<Velocity>(entity);
