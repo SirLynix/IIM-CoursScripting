@@ -38,7 +38,7 @@ struct Input
 };
 
 void PlayerControllerSystem(entt::registry& registry);
-void InputSystem(const SDLpp& sdlentt::registry& registry);
+void InputSystem(const SDLpp& sdl, entt::registry& registry);
 void GravitySystem(entt::registry& registry, float elapsedTime);
 void RenderSystem(entt::registry& registry, SDLppRenderer& renderer);
 void VelocitySystem(entt::registry& registry, float elapsedTime);
@@ -144,7 +144,7 @@ int main()
 
 			// Le réle de l'input system est de récupérer l'état du clavier 
 			// et de l'appliquer à l'input component des entités en ayant un (le joueur)
-			InputSystem(registry);
+			InputSystem(sdl, registry);
 
 			// Le Player Controller system applique les inputs à sa vélocité
 			PlayerControllerSystem(registry);
