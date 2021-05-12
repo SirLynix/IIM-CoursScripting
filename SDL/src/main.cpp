@@ -1,9 +1,71 @@
 // Inclusion des headers de la SDL
 
+#include "SDLpp.hpp"
+#include "SDLppTexture.hpp"
+#include "SDLppWindow.hpp"
+#include "SDLppFont.hpp"
+#include "SDLppTTF.hpp"
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
+
+int main(int argc, char *argv[])
+{
+	try
+	{
+		SDLpp sdl;
+		SDLppTTF ttfInit;
+		SDLppFont font("resources/coolvetica.ttf", 48);
+
+		SDLppWindow window("Ma super fenêtre", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720);
+		SDLppRenderer renderer = window.CreateRenderer(SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+		SDLppSurface textSurface = font.RenderUTF8Blended("Bonjour l'IIm !");
+		SDLppTexture textTexture = SDLppTexture::FromSurface(renderer, textSurface);
+
+		SDLppTexture circleTexture = SDLppTexture::FromFile(renderer, "resources/circle.png");
+
+		SDL_Rect textRect = textTexture.GetRect();
+		SDL_Rect circleRect = circleTexture.GetRect();
+		circleRect.x = 200;
+		circleRect.y = 200;
+
+		bool running = true;
+		while (running)
+		{
+			SDL_Event event;
+			while (sdl.PollEvent(event))
+			{
+				switch (event.type)
+				{
+					case SDL_QUIT:
+						running = false;
+						break;
+
+					default:
+						break;
+				}
+			}
+
+			renderer.SetDrawColor(0, 0, 0);
+			renderer.Clear();
+			renderer.Copy(textTexture, textRect);
+			renderer.Copy(circleTexture, circleRect);
+			renderer.Present();
+		}
+
+		return 0;
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
+		return EXIT_FAILURE;
+	}
+}
+
+/*
+Ancienne version (sans les wrapper)
 
 int main(int argc, char *argv[])
 {
@@ -164,3 +226,4 @@ int main(int argc, char *argv[])
 	SDL_Quit();
 	return 0;
 }
+*/
