@@ -10,6 +10,8 @@ public:
 	SDLpp(SDLpp&&) = delete;
 	~SDLpp();
 
+	const Uint8* GetKeyboardState(int* numkeys = nullptr) const;
+
 	Uint64 GetPerformanceCounter() const;
 	Uint64 GetPerformanceFrequency() const;
 

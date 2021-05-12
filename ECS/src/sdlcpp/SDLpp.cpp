@@ -12,6 +12,11 @@ SDLpp::~SDLpp()
 	SDL_Quit();
 }
 
+const Uint8* SDLpp::GetKeyboardState(int* numkeys) const
+{
+	return SDL_GetKeyboardState(numkeys);
+}
+
 Uint64 SDLpp::GetPerformanceCounter() const
 {
 	return SDL_GetPerformanceCounter();
