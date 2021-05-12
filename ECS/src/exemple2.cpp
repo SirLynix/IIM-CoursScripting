@@ -77,11 +77,10 @@ int main()
 			auto& entityVelocity = registry.emplace<Velocity>(player);
 			entityVelocity.x = 0.f;
 			entityVelocity.y = 0.f;
-		}
 
-		registry.emplace<NoGravity>(player);
-		auto& input = registry.emplace<Input>(player);
-		input.right = true;
+			registry.emplace<NoGravity>(player);
+			input = registry.emplace<Input>(player);
+		}
 
 		bool running = true;
 		while (running)
