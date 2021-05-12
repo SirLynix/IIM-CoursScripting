@@ -59,10 +59,6 @@ int main()
 
 		entt::registry registry;
 
-		Uint64 lastTime = sdl.GetPerformanceCounter();
-		Uint64 freq = sdl.GetPerformanceFrequency();
-
-
 		entt::entity player = registry.create();
 		{
 			auto& entityPos = registry.emplace<Position>(player);
@@ -81,6 +77,9 @@ int main()
 			registry.emplace<NoGravity>(player);
 			registry.emplace<Input>(player);
 		}
+
+		Uint64 lastTime = sdl.GetPerformanceCounter();
+		Uint64 freq = sdl.GetPerformanceFrequency();
 
 		bool running = true;
 		while (running)
